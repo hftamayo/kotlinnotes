@@ -3,10 +3,12 @@ package com.hftamayo.kotlinnotes.database;
 import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
+import androidx.room.RoomDatabase
 import com.hftamayo.kotlinnotes.models.Note;
+import com.hftamayo.kotlinnotes.utilities.DATABASE_NAME
 
 @Database(entities = arrayOf(Note::class), version = 1, exportSchema = false)
-abstract class NoteDatabase{
+abstract class NoteDatabase : RoomDatabase(){
 
     abstract fun getNoteDao() : NoteDao
 
