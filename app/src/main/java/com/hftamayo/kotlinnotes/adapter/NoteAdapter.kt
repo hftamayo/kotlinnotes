@@ -12,18 +12,10 @@ import com.hftamayo.kotlinnotes.models.Note
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NoteAdapter(private val context: Context) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
+class NoteAdapter(private val context: Context, val listener: NotesClickListener) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
     private val NotesList : ArrayList<Note>()
     private val fullList : ArrayList<Note>()
-
-    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val notes_layout = itemView.findViewById<CardView>(R.id.card_layout)
-        val title = itemView.findViewById<TextView>(R.id.tv_title)
-        val Note_tv = itemView.findViewById<TextView>(R.id.tv_note)
-        val date = itemView.findViewById<TextView>(R.id.tv_date)
-
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
@@ -41,10 +33,37 @@ class NoteAdapter(private val context: Context) : RecyclerView.Adapter<NoteAdapt
         holder.date.isSelected = true
 
         holder.notes_layout.setCardBackgroundColor(holder.itemView.resources.getColor(randomColor(), null))
+
+        holder.notes_layout.setOnClickListener{
+            listener.onTimeClicked(NotesList[holder.adapterPosition])
+        }
+        holder.notes_layout.setOnLongClickListener{
+            listener.onLogItemClicked(NotesList[holder.adapterPosition], holder.notes_layout)
+            true
+        }
     }
 
     override fun getItemCount(): Int {
         return NotesList.size
+    }
+
+    fun updateList(newList : List<Note>){
+        fullList.clear()
+        fullList.addAll(newList)
+
+        NotesList.clear()
+        NotesList.addAll(fullList)
+        notifyDataSetChanged()
+    }
+
+    fun filterList(search : String){
+        NotesList.clear()
+        for(item in fullList){
+            if(item.title?.lowercase()?.contains(search.lowercase()) == true ||
+                item.note?.lowercase()?.contains(search.lowercase()) == true){
+                NotesList.add(item)
+                }
+        }
     }
 
     fun randomColor() : Int{
@@ -60,5 +79,19 @@ class NoteAdapter(private val context: Context) : RecyclerView.Adapter<NoteAdapt
         val randomIndex = Random(seed.toLong()).nextInt(list.size)
         return list[randomIndex]
     }
+
+    inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val notes_layout = itemView.findViewById<CardView>(R.id.card_layout)
+        val title = itemView.findViewById<TextView>(R.id.tv_title)
+        val Note_tv = itemView.findViewById<TextView>(R.id.tv_note)
+        val date = itemView.findViewById<TextView>(R.id.tv_date)
+
+    }
+
+    interface NotesClickListener{
+        fun onTimeClicked(note:Note)
+        fun onLogItemClicked(note:Note, cardView: CardView)
+    }
+
 
 }
