@@ -9,6 +9,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.hftamayo.kotlinnotes.R
 import com.hftamayo.kotlinnotes.models.Note
+import java.util.*
+import kotlin.collections.ArrayList
 
 class NoteAdapter(private val context: Context) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
@@ -30,15 +32,33 @@ class NoteAdapter(private val context: Context) : RecyclerView.Adapter<NoteAdapt
 
     }
 
-    override fun getItemCount(): Int {
-        return NotesList.size
-    }
-
     override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
         val currentNote = NotesList[position]
         holder.title.text = currentNote.title
         holder.title.isSelected = true
         holder.Note_tv.text = currentNote.title
         holder.date.text = currentNote.date
+        holder.date.isSelected = true
+
+        holder.notes_layout.setCardBackgroundColor(holder.itemView.resources.getColor(randomColor(), null))
     }
+
+    override fun getItemCount(): Int {
+        return NotesList.size
+    }
+
+    fun randomColor() : Int{
+        val list = ArrayList<Int>()
+        list.add(R.color.NoteColor1)
+        list.add(R.color.NoteColor2)
+        list.add(R.color.NoteColor3)
+        list.add(R.color.NoteColor4)
+        list.add(R.color.NoteColor5)
+        list.add(R.color.NoteColor6)
+
+        val seed = System.currentTimeMillis().toInt()
+        val randomIndex = Random(seed.toLong()).nextInt(list.size)
+        return list[randomIndex]
+    }
+
 }
