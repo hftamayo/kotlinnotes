@@ -12,10 +12,10 @@ import com.hftamayo.kotlinnotes.models.Note
 import java.util.*
 import kotlin.collections.ArrayList
 
-class NoteAdapter(private val context: Context, val listener: NotesClickListener) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
+class NoteAdapter(private val context: Context, val listener: NotesClickListener) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    private val NotesList : ArrayList<Note>()
-    private val fullList : ArrayList<Note>()
+    private val NotesList = ArrayList<Note>()
+    private val fullList = ArrayList<Note>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         return NoteViewHolder(
@@ -64,6 +64,7 @@ class NoteAdapter(private val context: Context, val listener: NotesClickListener
                 NotesList.add(item)
                 }
         }
+        notifyDataSetChanged()
     }
 
     fun randomColor() : Int{
