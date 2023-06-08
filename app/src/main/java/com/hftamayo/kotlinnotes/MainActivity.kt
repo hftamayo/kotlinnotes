@@ -1,8 +1,10 @@
 package com.hftamayo.kotlinnotes
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Note
+import android.widget.LinearLayout
 import androidx.lifecycle.ViewModelProvider
 import com.hftamayo.kotlinnotes.adapter.NoteAdapter
 import com.hftamayo.kotlinnotes.database.NoteDatabase
@@ -30,9 +32,24 @@ class MainActivity : AppCompatActivity() {
                 adapter.updateList(list)
             }
         }
+        database = NoteDatabase.getDatabase(this)
     }
 
     private fun initUI(){
+        binding.recyclerView.setHasFixedSize(true)
+        binding.recyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayout.VERTICAL)
+        adapter = NotesAdapter(this, this)
+        binding.recyclerView.adapter = adapter
+
+        val getcontent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+            if(result.resultCode == Activity.RESULT_OK){
+                val note = result.data?.getSerializableExtra("note") as? Note
+                if(note != null){
+                    viewModel.insert
+                }
+            }
+
+        }
 
     }
 }
