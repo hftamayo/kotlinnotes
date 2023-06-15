@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         adapter = NoteAdapter(this, this)
         binding.recyclerView.adapter = adapter
 
-        val getcontent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
+        val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if(result.resultCode == Activity.RESULT_OK){
                 val note = result.data?.getSerializableExtra("note") as? Note
                 if(note != null){
