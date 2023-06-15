@@ -5,8 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.SearchView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.hftamayo.kotlinnotes.adapter.NoteAdapter
@@ -15,7 +17,7 @@ import com.hftamayo.kotlinnotes.databinding.ActivityMainBinding
 import com.hftamayo.kotlinnotes.models.Note
 import com.hftamayo.kotlinnotes.models.NoteViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NoteAdapter.NotesClickListener, PopupMenu.OnMenuItemClickListener {
     private lateinit var binding : ActivityMainBinding
     private lateinit var database : NoteDatabase
     lateinit var viewModel : NoteViewModel
@@ -82,4 +84,21 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+
+    override fun onTimeClicked(note: Note) {
+        val intent = Intent(this@MainActivity,AddNote::class.java)
+        intent.putExtra("current_note",note)
+        updateNote.launch(intent)
+    }
+
+    override fun onLogItemClicked(note: Note, cardView: CardView) {
+        selectedNote = note
+        popUpDisplay(cardView)
+    }
+
+    private fun popUpDisplay(cardView: CardView){
+        val popup = PopupMenu(this,cardView)
+        popup.setOnMenuItemClickListener(this@MainActivity)
+        popup.inflate(R.menu.pop_up_menu)
+        popup.show()
 }
