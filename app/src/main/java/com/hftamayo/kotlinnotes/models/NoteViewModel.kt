@@ -1,8 +1,13 @@
 package com.hftamayo.kotlinnotes.models
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.hftamayo.kotlinnotes.database.NoteDatabase
 import com.hftamayo.kotlinnotes.database.NoteRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
     private val repository : NoteRepository
